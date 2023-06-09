@@ -1,0 +1,101 @@
+---
+title: "ANA 515 Assignment 2"
+author: "PRASANTH MANUPURI"
+date: "2023-06-08"
+output: 
+  html_document:
+    theme:
+      bootswatch: minty 
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Section 1: Data Description
+
+The Abalone data set contains measurements on 9 attributes collected from a sample of 4, 177 abalones. The aim of the data collection was to improve on the existing knowledge on the member of the sea snails family, the abalone. The attributes contained in the data are the number of rings (a measure of the age of the abalone), height, shell weight, shucked weight, viscera weight, whole weight, diameter, sex and length. All the attributes relate to the abalone and represents its characteristics. The data can be used to provide insight into questions such as "Which characteristics are most significant in the aging of abalone?" and "What is association between the age of the abalone and its various characteristics?". The data as downloaded from https://www.openml.org/search?type=data&amp;sort=runs&amp;id=183&amp;status=active was in an .arff format and required conversion into the delimited format .csv (comma delimited) for use in R. Normally, the Weka Tool would be used for the opening of the .arff file, and was used for the conversion to .csv.
+
+
+## Installing and Loading Packages
+
+```{r eval=FALSE}
+# Installation
+install.packages("tidyverse")
+install.packages("knitr")
+install.packages("bslib")
+
+```
+
+```{r message=FALSE, warning=FALSE}
+#Loading Packages
+library(tidyverse)
+library(knitr)
+library(bslib)
+```
+
+
+
+## Section 2: Loading the Abalone Data Set
+
+```{r}
+# Importing data Using the read_csv() from readr package within tidyverse
+Abalone <- read_csv("Abalone.csv")
+```
+
+## Section 3: Data Cleaning
+
+```{r}
+# Filtering for male abalones only
+male_abalone <- Abalone %>% filter(Sex == 'M')
+# Removing the Sex variable from the filtered data
+male_abalone <- male_abalone %>% select(-Sex)
+
+```
+
+## Section 4: Data Characteristics
+
+The abalone data contains data on `r nrow(Abalone)` abalones. From the sample, only `r nrow(male_abalone)` are male abalones. The number of columns in the full data set was `r ncol(Abalone)`, while in the filtered data set the number of columns were `r ncol(male_abalone)`. The names of the columns and a brief description of each are in the table below:
+
+```{r results = TRUE}
+library(knitr)
+columns_summary <- data.frame(
+  Columns = c(colnames(Abalone)),
+  Description = c("The gender of the abalone; Male (M), Female (F) or Infant (I)", 
+                  "The length of the shell of the abalone", 
+                  "The diameter of the shell of the abalone",
+                  "The height of the shell of the abalone",
+                  "The weight of both the abalone and the shell",
+                  "The weight of the abalone when removed from the shell",
+                  "The weight of the abalone gut after bleeding",
+                  "The weigth of the abalone shell",
+                  "The number of rings on the abalone shell"))
+
+kable(columns_summary, caption = "Variables' Brief Description")
+```
+
+## Section 5: Summary Statistics
+
+```{r, include = TRUE}
+# Creating subset of filtered data
+subset_male_abalone <- male_abalone %>% select(Class_number_of_rings, Diameter, Whole_weight)
+# Summary Statistics
+Summarytable<-summary(subset_male_abalone) 
+Summarytable 
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
